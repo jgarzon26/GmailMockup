@@ -33,6 +33,7 @@ class HomePage extends StatefulWidget {
   final List<Message> inbox = [];
   final List<Message> sent = [];
   final List<Message> archive = [];
+  final searchController = TextEditingController();
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -54,6 +55,7 @@ class _HomePageState extends State<HomePage> {
       color: colors[4],
       dateReceived: DateTime.now());
   var currBox = CurrentBox.inbox.index;
+  List<Message> searches = [];
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,8 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: TextField(
+              controller: widget.searchController,
+              onChanged: searchBox,
               decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: 'Search',
@@ -133,12 +137,122 @@ class _HomePageState extends State<HomePage> {
     return box;
   }
 
+/*Search function */
+  void searchBox(String query) {
+    final searchedMail = widget.inbox.where((message) {
+      final name = message.getName.toLowerCase();
+      final input = query.toLowerCase();
+
+      return name.contains(input);
+    }).toList();
+
+    setState(() => searches = searchedMail);
+  }
+
 /*Display Inbox */
   Widget displayInbox(BuildContext context) {
     if (widget.inbox.isEmpty) {
       return const Expanded(
         child: Center(
           child: Text("Inbox is empty"),
+        ),
+      );
+    } else if (widget.searchController.text.isNotEmpty) {
+      return Expanded(
+        child: ListView(
+          children: searches.map((Message mess) {
+            return Dismissible(
+                key: UniqueKey(),
+                background: Container(
+                    color: Colors.green,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.archive),
+                          Text(
+                            'Archive',
+                          ),
+                        ],
+                      ),
+                    )),
+                secondaryBackground: Container(
+                    color: Colors.red,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Icon(Icons.delete),
+                          Text(
+                            'Trash',
+                          ),
+                        ],
+                      ),
+                    )),
+                onDismissed: (direction) {
+                  if (direction == DismissDirection.startToEnd) {
+                    setState(() {
+                      widget.archive.add(mess);
+                      searches.remove(mess);
+                    });
+                  } else {
+                    setState(() {
+                      searches.remove(mess);
+                    });
+                  }
+                },
+                child: InkWell(
+                    onTap: () {},
+                    child: Row(children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: mess.getColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          mess.getName[0],
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 50),
+                      SizedBox(
+                        width: 350,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${months[mess.getMonth]} ${mess.getDay}",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              mess.getName,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              mess.getMessage,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 10,
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ])));
+          }).toList(),
         ),
       );
     }
@@ -209,7 +323,6 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       width: 350,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -250,6 +363,65 @@ class _HomePageState extends State<HomePage> {
           child: Text("Inbox is empty"),
         ),
       );
+    } else if (widget.searchController.text.isNotEmpty) {
+      return Expanded(
+        child: ListView(
+          children: searches.map((Message mess) {
+            return Dismissible(
+                key: UniqueKey(),
+                child: InkWell(
+                    onTap: () {},
+                    child: Row(children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: mess.getColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          mess.getName[0],
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 50),
+                      SizedBox(
+                        width: 350,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${months[mess.getMonth]} ${mess.getDay}",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              mess.getName,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              mess.getMessage,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 10,
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ])));
+          }).toList(),
+        ),
+      );
     }
     return Expanded(
       child: ListView(
@@ -279,7 +451,6 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       width: 350,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -320,6 +491,104 @@ class _HomePageState extends State<HomePage> {
           child: Text("Inbox is empty"),
         ),
       );
+    } else if (widget.searchController.text.isNotEmpty) {
+      return Expanded(
+        child: ListView(
+          children: searches.map((Message mess) {
+            return Dismissible(
+                key: UniqueKey(),
+                background: Container(
+                    color: Colors.green,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.archive),
+                          Text(
+                            'Archive',
+                          ),
+                        ],
+                      ),
+                    )),
+                secondaryBackground: Container(
+                    color: Colors.red,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Icon(Icons.delete),
+                          Text(
+                            'Trash',
+                          ),
+                        ],
+                      ),
+                    )),
+                onDismissed: (direction) {
+                  if (direction == DismissDirection.startToEnd) {
+                    setState(() {
+                      widget.archive.add(mess);
+                      searches.remove(mess);
+                    });
+                  } else {
+                    setState(() {
+                      searches.remove(mess);
+                    });
+                  }
+                },
+                child: InkWell(
+                    onTap: () {},
+                    child: Row(children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: mess.getColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          mess.getName[0],
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 50),
+                      SizedBox(
+                        width: 350,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${months[mess.getMonth]} ${mess.getDay}",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              mess.getName,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              mess.getMessage,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 10,
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ])));
+          }).toList(),
+        ),
+      );
     }
     return Expanded(
       child: ListView(
@@ -349,7 +618,6 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       width: 350,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -404,8 +672,10 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             onTap: () {
+              widget.searchController.clear();
               setState(() {
                 currBox = CurrentBox.inbox.index;
+                searches.clear();
               });
               Navigator.pop(context);
             }),
@@ -419,8 +689,10 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           onTap: () {
+            widget.searchController.clear();
             setState(() {
               currBox = CurrentBox.sent.index;
+              searches.clear();
             });
             Navigator.pop(context);
           },
@@ -435,8 +707,10 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           onTap: () {
+            widget.searchController.clear();
             setState(() {
               currBox = CurrentBox.archive.index;
+              searches.clear();
             });
             Navigator.pop(context);
           },
