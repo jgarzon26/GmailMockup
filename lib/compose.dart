@@ -23,20 +23,22 @@ class _ComposePageState extends State<ComposePage> {
 
     final overlays = Overlays(context);
 
+    void displayOverlays(){
+      if(_isAttachmentOpen){
+        overlays.showAttachment(false);
+        _isAttachmentOpen = false;
+      }
+
+      if(_isOptionsOpen){
+        overlays.showOptions(false);
+        _isOptionsOpen = false;
+      }
+    }
+
     return SafeArea(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () {
-          if(_isAttachmentOpen){
-            overlays.showAttachment(false);
-            _isAttachmentOpen = false;
-          }
-
-          if(_isOptionsOpen){
-            overlays.showOptions(false);
-            _isOptionsOpen = false;
-          }
-        },
+        onTap: () => displayOverlays(),
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -86,6 +88,7 @@ class _ComposePageState extends State<ComposePage> {
                     "from",
                   )
                 ),
+                onTap: displayOverlays,
                 readOnly: true,
               ),
               TextFormField(
@@ -96,12 +99,14 @@ class _ComposePageState extends State<ComposePage> {
                       "to",
                     )
                 ),
+                onTap: displayOverlays,
               ),
               TextField(
                 controller: _subjectController,
                 decoration: InputDecoration(
                   hintText: "Subject"
                 ),
+                onTap: displayOverlays,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
@@ -112,6 +117,7 @@ class _ComposePageState extends State<ComposePage> {
                     hintText: "Compose email",
                     floatingLabelBehavior: FloatingLabelBehavior.auto,
                   ),
+                  onTap: displayOverlays,
                 ),
               ),
             ],
