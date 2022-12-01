@@ -13,6 +13,11 @@ class _ComposePageState extends State<ComposePage> {
   var _isAttachmentOpen = false;
   var _isOptionsOpen = false;
 
+  final _fromController = TextEditingController();
+  final _toController = TextEditingController();
+  final _subjectController = TextEditingController();
+  final _composeEmailController = TextEditingController();
+
   @override
   Widget build(BuildContext context){
 
@@ -68,6 +73,45 @@ class _ComposePageState extends State<ComposePage> {
                 },
                 icon: Icon(
                   Icons.more_vert,
+                ),
+              ),
+            ],
+          ),
+          body: Column(
+            children: [
+              TextField(
+                controller: _fromController,
+                decoration: InputDecoration(
+                  label: Text(
+                    "from",
+                  )
+                ),
+                readOnly: true,
+              ),
+              TextFormField(
+                controller: _toController,
+                autofocus: true,
+                decoration: InputDecoration(
+                    label: Text(
+                      "to",
+                    )
+                ),
+              ),
+              TextField(
+                controller: _subjectController,
+                decoration: InputDecoration(
+                  hintText: "Subject"
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: TextField(
+                  controller: _composeEmailController,
+                  decoration: InputDecoration(
+                    isCollapsed: true,
+                    hintText: "Compose email",
+                    floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  ),
                 ),
               ),
             ],
