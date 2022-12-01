@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gmail_mockup/homepage.dart';
+import 'loginpage.dart';
 
 main() => runApp(const MyApp());
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }
