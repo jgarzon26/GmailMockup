@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gmail_mockup/messagepage.dart';
 import 'months.dart';
 import 'message.dart';
+import 'settings.dart';
 
 enum CurrentBox { inbox, sent, archive }
 
@@ -104,6 +105,7 @@ class _HomePageState extends State<HomePage> {
         },
         child: const Icon(Icons.send),
       ),
+      bottomNavigationBar: getBottomNav(),
     ));
   }
 
@@ -734,7 +736,35 @@ class _HomePageState extends State<HomePage> {
             Navigator.pop(context);
           },
         ),
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: const Text(
+            "Settings",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Settings()));
+          },
+        )
       ],
     ));
+  }
+
+  Widget getBottomNav() {
+    return BottomNavigationBar(items: const <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.mail),
+        label: 'Mail',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.meeting_room),
+        label: 'Meet',
+      ),
+    ]);
   }
 }
