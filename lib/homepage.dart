@@ -105,6 +105,7 @@ class _HomePageState extends State<HomePage> {
         },
         child: const Icon(Icons.send),
       ),
+      bottomNavigationBar: getBottomNav(),
     ));
   }
 
@@ -745,11 +746,25 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           onTap: () {
+            Navigator.pop(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const Settings()));
           },
         )
       ],
     ));
+  }
+
+  Widget getBottomNav() {
+    return BottomNavigationBar(items: const <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.mail),
+        label: 'Mail',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.meeting_room),
+        label: 'Meet',
+      ),
+    ]);
   }
 }
