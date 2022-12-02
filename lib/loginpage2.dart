@@ -30,7 +30,7 @@ class _LoginPage2State extends State<LoginPage2> {
               title: Text(widget._email),
             ),
             TextFormField(
-              obscureText: _showPassword,
+              obscureText: !_showPassword,
               decoration: InputDecoration(
                 hintText: "Enter your password",
               ),
@@ -40,8 +40,12 @@ class _LoginPage2State extends State<LoginPage2> {
                 icon: Icon(
                   _showPasswordCheckbox,
                 ),
-                onPressed: () => setState(() => _showPasswordCheckbox = _showPassword ? Icons.check_box : Icons.check_box_outline_blank),
+                onPressed: () {
+                  _showPassword = !_showPassword;
+                  setState(() => _showPasswordCheckbox = _showPassword ? Icons.check_box : Icons.check_box_outline_blank);
+                },
               ),
+              title: Text("Show Password"),
             ),
             TextButton(
               onPressed: () {},

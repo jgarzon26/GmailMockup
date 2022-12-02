@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmail_mockup/loginpage2.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage1 extends StatefulWidget{
@@ -8,6 +9,8 @@ class LoginPage1 extends StatefulWidget{
 }
 
 class _LoginPage1State extends State<LoginPage1>{
+
+  final _emailController = TextEditingController();
 
   void _launchUrl() async {
     final url = Uri.parse("https://r.mtdv.me/learnmore");
@@ -60,7 +63,8 @@ class _LoginPage1State extends State<LoginPage1>{
                 ],
               ),
               TextFormField(
-                keyboardType: TextInputType.emailAddress,
+                //keyboardType: TextInputType.emailAddress,
+                controller: _emailController,
                 decoration: InputDecoration(
                   labelText: "Email or phone",
                 ),
@@ -84,7 +88,10 @@ class _LoginPage1State extends State<LoginPage1>{
           width: MediaQuery.of(context).size.width * 0.35,
           child: FloatingActionButton(
             onPressed: () {
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage2(_emailController.text))
+              );
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
