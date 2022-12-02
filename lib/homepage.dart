@@ -33,24 +33,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  /*Temporary Messages */
-  Message one = Message(
-      message: "Hello",
-      sender: "helloworld@gmail.com",
-      name: "World",
-      color: colors[1],
-      dateReceived: DateTime.now());
-  Message two = Message(
-      message: "Hello, universe!",
-      sender: "hellouniv@gmail.com",
-      name: "Universe",
-      color: colors[4],
-      dateReceived: DateTime.now());
   var currBox = CurrentBox.inbox.index;
   List<Message> searches = [];
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var width = size.width;
     return SafeArea(
         child: Scaffold(
       key: scaffoldKey,
@@ -97,13 +86,14 @@ class _HomePageState extends State<HomePage> {
                   )),
             ),
           ),
-          runBoxes(),
+          runBoxes(width),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ComposePage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ComposePage()));
           }
         },
         child: const Icon(Icons.send),
@@ -112,17 +102,17 @@ class _HomePageState extends State<HomePage> {
     ));
   }
 
-  Widget runBoxes() {
+  Widget runBoxes(double width) {
     Widget box = const Text("Empty");
     switch (currBox) {
       case 0:
-        box = displayInbox(context);
+        box = displayInbox(context, width);
         break;
       case 1:
-        box = displaySent(context);
+        box = displaySent(context, width);
         break;
       case 2:
-        box = displayArchive(context);
+        box = displayArchive(context, width);
     }
 
     return box;
@@ -141,7 +131,7 @@ class _HomePageState extends State<HomePage> {
   }
 
 /*Display Inbox */
-  Widget displayInbox(BuildContext context) {
+  Widget displayInbox(BuildContext context, double width) {
     if (widget.inbox.isEmpty) {
       return const Expanded(
         child: Center(
@@ -152,7 +142,122 @@ class _HomePageState extends State<HomePage> {
       return Expanded(
         child: ListView(
           children: searches.map((Message mess) {
-            return Dismissible(
+            return SizedBox(
+                width: width,
+                child: Dismissible(
+                    key: UniqueKey(),
+                    background: Container(
+                        color: Colors.green,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            children: const [
+                              Icon(Icons.archive),
+                              Text(
+                                'Archive',
+                              ),
+                            ],
+                          ),
+                        )),
+                    secondaryBackground: Container(
+                        color: Colors.red,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: const [
+                              Icon(Icons.delete),
+                              Text(
+                                'Trash',
+                              ),
+                            ],
+                          ),
+                        )),
+                    onDismissed: (direction) {
+                      if (direction == DismissDirection.startToEnd) {
+                        setState(() {
+                          widget.archive.add(mess);
+                          searches.remove(mess);
+                        });
+                      } else {
+                        setState(() {
+                          searches.remove(mess);
+                        });
+                      }
+                    },
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MessagePage(message: mess)));
+                      },
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              height: 60,
+                              width: 60,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: mess.getColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                mess.getName[0],
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 50),
+                            SizedBox(
+                              width: width * 0.6,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${months[mess.getMonth]} ${mess.getDay}",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Text(
+                                    mess.getName,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Text(
+                                    mess.getMessage,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 10,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ]),
+                    )));
+          }).toList(),
+        ),
+      );
+    }
+    return Expanded(
+      child: ListView(
+        children: widget.inbox.map((Message mess) {
+          return SizedBox(
+            width: width,
+            child: Dismissible(
                 key: UniqueKey(),
                 background: Container(
                     color: Colors.green,
@@ -185,11 +290,11 @@ class _HomePageState extends State<HomePage> {
                   if (direction == DismissDirection.startToEnd) {
                     setState(() {
                       widget.archive.add(mess);
-                      searches.remove(mess);
+                      widget.inbox.remove(mess);
                     });
                   } else {
                     setState(() {
-                      searches.remove(mess);
+                      widget.inbox.remove(mess);
                     });
                   }
                 },
@@ -201,164 +306,69 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) =>
                                   MessagePage(message: mess)));
                     },
-                    child: Row(children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: mess.getColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          mess.getName[0],
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 50),
-                      SizedBox(
-                        width: 350,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${months[mess.getMonth]} ${mess.getDay}",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            Text(
-                              mess.getName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            Text(
-                              mess.getMessage,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 10,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ])));
-          }).toList(),
-        ),
-      );
-    }
-    return Expanded(
-      child: ListView(
-        children: widget.inbox.map((Message mess) {
-          return Dismissible(
-              key: UniqueKey(),
-              background: Container(
-                  color: Colors.green,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
                     child: Row(
-                      children: const [
-                        Icon(Icons.archive),
-                        Text(
-                          'Archive',
-                        ),
-                      ],
-                    ),
-                  )),
-              secondaryBackground: Container(
-                  color: Colors.red,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Icon(Icons.delete),
-                        Text(
-                          'Trash',
-                        ),
-                      ],
-                    ),
-                  )),
-              onDismissed: (direction) {
-                if (direction == DismissDirection.startToEnd) {
-                  setState(() {
-                    widget.archive.add(mess);
-                    widget.inbox.remove(mess);
-                  });
-                } else {
-                  setState(() {
-                    widget.inbox.remove(mess);
-                  });
-                }
-              },
-              child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MessagePage(message: mess)));
-                  },
-                  child: Row(children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: mess.getColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        mess.getName[0],
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 50),
-                    SizedBox(
-                      width: 350,
-                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${months[mess.getMonth]} ${mess.getDay}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                        children: <Widget>[
+                          Container(
+                            height: 60,
+                            width: 60,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: mess.getColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              mess.getName[0],
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                              ),
                             ),
                           ),
-                          Text(
-                            mess.getName,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          SizedBox(
+                            width: width * 0.6,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${months[mess.getMonth]} ${mess.getDay}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  mess.getName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  mess.getMessage,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            mess.getMessage,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 10,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ])));
+                        ]))),
+          );
         }).toList(),
       ),
     );
   }
 
 /*Display Sent box */
-  Widget displaySent(BuildContext context) {
+  Widget displaySent(BuildContext context, double width) {
     if (widget.sent.isEmpty) {
       return const Expanded(
         child: Center(
@@ -369,64 +379,70 @@ class _HomePageState extends State<HomePage> {
       return Expanded(
         child: ListView(
           children: searches.map((Message mess) {
-            return Dismissible(
-                key: UniqueKey(),
-                child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MessagePage(message: mess)));
-                    },
-                    child: Row(children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: mess.getColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          mess.getName[0],
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 50),
-                      SizedBox(
-                        width: 350,
-                        child: Column(
+            return SizedBox(
+              width: width,
+              child: Dismissible(
+                  key: UniqueKey(),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MessagePage(message: mess)));
+                      },
+                      child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${months[mess.getMonth]} ${mess.getDay}",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                          children: <Widget>[
+                            Container(
+                              height: 60,
+                              width: 60,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: mess.getColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                mess.getName[0],
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
                               ),
                             ),
-                            Text(
-                              mess.getName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
+                            const SizedBox(width: 50),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${months[mess.getMonth]} ${mess.getDay}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  mess.getName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  mess.getMessage,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 10,
+                                  ),
+                                )
+                              ],
                             ),
-                            Text(
-                              mess.getMessage,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 10,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ])));
+                          ]))),
+            );
           }).toList(),
         ),
       );
@@ -434,70 +450,74 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
       child: ListView(
         children: widget.sent.map((Message mess) {
-          return Dismissible(
-              key: UniqueKey(),
-              child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MessagePage(message: mess)));
-                  },
-                  child: Row(children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: mess.getColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        mess.getName[0],
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 50),
-                    SizedBox(
-                      width: 350,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${months[mess.getMonth]} ${mess.getDay}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
+          return SizedBox(
+            width: width,
+            child: Dismissible(
+                key: UniqueKey(),
+                child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MessagePage(message: mess)));
+                    },
+                    child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: mess.getColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                mess.getName[0],
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
+                              ),
                             ),
-                          ),
-                          Text(
-                            mess.getName,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${months[mess.getMonth]} ${mess.getDay}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  mess.getName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  mess.getMessage,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 10,
+                                  ),
+                                )
+                              ],
                             ),
-                          ),
-                          Text(
-                            mess.getMessage,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 10,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ])));
+                          ]),
+                    ))
+          );
         }).toList(),
       ),
     );
   }
 
 /*Display Archive box */
-  Widget displayArchive(BuildContext context) {
+  Widget displayArchive(BuildContext context, double width) {
     if (widget.archive.isEmpty) {
       return const Expanded(
         child: Center(
@@ -508,47 +528,123 @@ class _HomePageState extends State<HomePage> {
       return Expanded(
         child: ListView(
           children: searches.map((Message mess) {
-            return Dismissible(
+            return SizedBox(
+              width: width,
+              child: Dismissible(
+                  key: UniqueKey(),
+                  background: Container(
+                      color: Colors.green,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(
+                          children: const [
+                            Icon(Icons.archive),
+                            Text(
+                              'Archive',
+                            ),
+                          ],
+                        ),
+                      )),
+                  secondaryBackground: Container(
+                      color: Colors.red,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Icon(Icons.delete),
+                            Text(
+                              'Trash',
+                            ),
+                          ],
+                        ),
+                      )),
+                  onDismissed: (direction) {
+                    if (direction == DismissDirection.startToEnd) {
+                      setState(() {
+                        widget.archive.add(mess);
+                        searches.remove(mess);
+                      });
+                    } else {
+                      setState(() {
+                        searches.remove(mess);
+                      });
+                    }
+                  },
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MessagePage(message: mess)));
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                        Container(
+                          height: 60,
+                          width: 60,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: mess.getColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            mess.getName[0],
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 50),
+                        SizedBox(
+                          width: width * 0.6,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${months[mess.getMonth]} ${mess.getDay}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                mess.getName,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                mess.getMessage,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 10,
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ]))),
+            );
+          }).toList(),
+        ),
+      );
+    }
+    return Expanded(
+      child: ListView(
+        children: widget.archive.map((Message mess) {
+          return SizedBox(
+            width: width,
+            child: Dismissible(
                 key: UniqueKey(),
-                background: Container(
-                    color: Colors.green,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.archive),
-                          Text(
-                            'Archive',
-                          ),
-                        ],
-                      ),
-                    )),
-                secondaryBackground: Container(
-                    color: Colors.red,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Icon(Icons.delete),
-                          Text(
-                            'Trash',
-                          ),
-                        ],
-                      ),
-                    )),
-                onDismissed: (direction) {
-                  if (direction == DismissDirection.startToEnd) {
-                    setState(() {
-                      widget.archive.add(mess);
-                      searches.remove(mess);
-                    });
-                  } else {
-                    setState(() {
-                      searches.remove(mess);
-                    });
-                  }
-                },
                 child: InkWell(
                     onTap: () {
                       Navigator.push(
@@ -557,7 +653,9 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) =>
                                   MessagePage(message: mess)));
                     },
-                    child: Row(children: <Widget>[
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
@@ -589,6 +687,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               mess.getName,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
@@ -596,6 +695,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               mess.getMessage,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w300,
                                 fontSize: 10,
@@ -604,71 +704,8 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       )
-                    ])));
-          }).toList(),
-        ),
-      );
-    }
-    return Expanded(
-      child: ListView(
-        children: widget.archive.map((Message mess) {
-          return Dismissible(
-              key: UniqueKey(),
-              child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MessagePage(message: mess)));
-                  },
-                  child: Row(children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: mess.getColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        mess.getName[0],
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 50),
-                    SizedBox(
-                      width: 350,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${months[mess.getMonth]} ${mess.getDay}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            mess.getName,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text(
-                            mess.getMessage,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 10,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ])));
+                    ]))),
+          );
         }).toList(),
       ),
     );

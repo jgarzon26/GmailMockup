@@ -56,8 +56,8 @@ class MessagePage extends StatelessWidget {
                 color: message.getColor,
                 shape: BoxShape.circle,
               ),
-              child: Text(
-                message.getMessage[0],
+              child: Text(  
+                message.getName[0],
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.white,
