@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gmail_mockup/compose.dart';
 import 'package:gmail_mockup/messagepage.dart';
+import 'package:gmail_mockup/overlays.dart';
 import 'months.dart';
 import 'message.dart';
 import 'settings.dart';
@@ -17,7 +18,10 @@ var colors = [
 ];
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+
+  late final String _email;
+
+  HomePage(this._email, {super.key});
   final List<Message> inbox = [];
   final List<Message> sent = [];
   final List<Message> archive = [];
@@ -70,17 +74,19 @@ class _HomePageState extends State<HomePage> {
                   suffixIcon: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Overlays(context).showAccountDetails(true, widget._email);
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: const BoxDecoration(
                           color: Colors.red,
                           shape: BoxShape.circle,
                         ),
-                        child: const Text(
-                          'A',
+                        child: Text(
+                          widget._email.characters.first,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 30,
