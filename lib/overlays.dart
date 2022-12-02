@@ -113,16 +113,13 @@ class Overlays{
 
     if(displayAccount){
       _accountEntry = OverlayEntry(builder: (context) =>
-          Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: _buildAccount(email),
-            ),
+          Positioned(
+            width: MediaQuery.of(context).size.width * 0.8,
+            top: MediaQuery.of(context).size.height * 0.17,
+            left: MediaQuery.of(context).size.width * 0.1,
+            child: _buildAccount(email),
           ),
-        opaque: true,
       );
-
       overlay.insert(_accountEntry!);
     } else {
       _hideOverlay(_accountEntry);
@@ -132,19 +129,27 @@ class Overlays{
   Widget _buildAccount(String email) => Material(
     child: Column(
       children: [
-        ListTile(
-          leading: IconButton(
-            icon: Icon(
-              Icons.clear,
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.clear,
+                ),
+                onPressed: () {
+                _hideOverlay(_accountEntry);
+                },
+              ),
             ),
-            onPressed: () {
-              _hideOverlay(_accountEntry);
-            },
-          ),
-          title: Text(
-            "Google",
-            textAlign: TextAlign.center,
-          ),
+            const Text(
+              "Google",
+              style: TextStyle(
+                fontSize: 22,
+              ),
+            ),
+          ],
         ),
         ListTile(
           leading: Icon(
