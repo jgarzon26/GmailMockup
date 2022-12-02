@@ -139,27 +139,30 @@ class Overlays{
   Widget _buildAccount(String email) => Material(
     child: Column(
       children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.clear,
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.clear,
+                  ),
+                  onPressed: () {
+                  _hideOverlay(_accountEntry);
+                  },
                 ),
-                onPressed: () {
-                _hideOverlay(_accountEntry);
-                },
               ),
-            ),
-            const Text(
-              "Google",
-              style: TextStyle(
-                fontSize: 22,
+              const Text(
+                "Google",
+                style: TextStyle(
+                  fontSize: 22,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         ListTile(
           leading: Icon(
@@ -172,9 +175,12 @@ class Overlays{
             "99+",
           ),
         ),
-        ElevatedButton(
-            onPressed: () {},
-            child: Text("Manage your Google Account"),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: ElevatedButton(
+              onPressed: () {},
+              child: Text("Manage your Google Account"),
+          ),
         ),
         ListTile(
           leading: Icon(
@@ -194,11 +200,21 @@ class Overlays{
           ),
           onTap: () {},
         ),
-        Row(
-          children: [
-            ElevatedButton(onPressed: () {}, child: Text("Privacy Policy")),
-            ElevatedButton(onPressed: () {}, child: Text("Terms of service")),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Privacy Policy")
+              ),
+              ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Terms of service")
+              ),
+            ],
+          ),
         )
       ],
     ),
