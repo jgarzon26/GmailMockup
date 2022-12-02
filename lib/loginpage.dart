@@ -85,7 +85,7 @@ class _LoginPage1State extends State<LoginPage1>{
           ),
         ),
         floatingActionButton: Container(
-          width: MediaQuery.of(context).size.width * 0.35,
+          width: MediaQuery.of(context).size.width * 0.25,
           child: FloatingActionButton(
             onPressed: () {
               Navigator.push(

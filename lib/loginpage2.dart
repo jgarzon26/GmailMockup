@@ -3,15 +3,18 @@ import 'package:gmail_mockup/homepage.dart';
 
 class LoginPage2 extends StatefulWidget{
 
-  late final String _email;
+  final String _email;
 
-  LoginPage2(this._email);
+  const LoginPage2(this._email, {super.key});
 
   @override
   State<LoginPage2> createState() => _LoginPage2State();
 }
 
 class _LoginPage2State extends State<LoginPage2> {
+
+  static const double _paddingLeft = 10;
+
   var _showPassword = false;
   IconData _showPasswordCheckbox = Icons.check_box_outline_blank;
 
@@ -21,46 +24,88 @@ class _LoginPage2State extends State<LoginPage2> {
       child: Scaffold(
         body: Column(
           children: [
-            Text("Google"),
-            Text("Welcome"),
-            ListTile(
-              leading: Icon(
-                Icons.perm_identity,
-              ),
-              title: Text(widget._email),
-            ),
-            TextFormField(
-              obscureText: !_showPassword,
-              decoration: InputDecoration(
-                hintText: "Enter your password",
+            const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                "Google",
+                style: TextStyle(
+                  fontSize: 24,
+                ),
               ),
             ),
-            ListTile(
-              leading: IconButton(
-                icon: Icon(
+            const Text(
+              "Welcome",
+              style: TextStyle(
+                fontSize: 32,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                const Padding(
+                    padding: EdgeInsets.only(right: 8, top: _paddingLeft),
+                    child: Icon(Icons.perm_identity),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: _paddingLeft),
+                    child: Text(widget._email),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              child: TextFormField(
+                obscureText: !_showPassword,
+                decoration: const InputDecoration(
+                  hintText: "Enter your password",
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: _paddingLeft),
+              child: ListTile(
+                leading: Icon(
                   _showPasswordCheckbox,
                 ),
-                onPressed: () {
+                onTap: () {
                   _showPassword = !_showPassword;
-                  setState(() => _showPasswordCheckbox = _showPassword ? Icons.check_box : Icons.check_box_outline_blank);
+                  setState(() => _showPasswordCheckbox = _showPassword
+                      ? Icons.check_box
+                      : Icons.check_box_outline_blank);
                 },
+                horizontalTitleGap: 0,
+                title: const Text("Show Password"),
               ),
-              title: Text("Show Password"),
             ),
-            TextButton(
-              onPressed: () {},
-              child: Text("Forgot Password?"),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: _paddingLeft + 10),
+                child: TextButton(
+                  onPressed: () {},
+                  child: const Text("Forgot Password?"),
+                ),
+              ),
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage())
-            );
-          },
-          child: Text("Next"),
+        floatingActionButton: Container(
+          width: MediaQuery.of(context).size.width * 0.25,
+          child: FloatingActionButton(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage())
+              );
+            },
+            child: const Text("Next"),
+          ),
         ),
       ),
     );
