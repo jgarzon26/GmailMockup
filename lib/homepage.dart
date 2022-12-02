@@ -196,49 +196,49 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           children: searches.map((Message mess) {
             return SizedBox(
-              width: width,
-              child: Dismissible(
-                  key: UniqueKey(),
-                  background: Container(
-                      color: Colors.green,
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Row(
-                          children: const [
-                            Icon(Icons.archive),
-                            Text(
-                              'Archive',
-                            ),
-                          ],
-                        ),
-                      )),
-                  secondaryBackground: Container(
-                      color: Colors.red,
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Icon(Icons.delete),
-                            Text(
-                              'Trash',
-                            ),
-                          ],
-                        ),
-                      )),
-                  onDismissed: (direction) {
-                    if (direction == DismissDirection.startToEnd) {
-                      setState(() {
-                        widget.archive.add(mess);
-                        searches.remove(mess);
-                      });
-                    } else {
-                      setState(() {
-                        searches.remove(mess);
-                      });
-                    }
-                  },
-                  child: InkWell(
+                width: width,
+                child: Dismissible(
+                    key: UniqueKey(),
+                    background: Container(
+                        color: Colors.green,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            children: const [
+                              Icon(Icons.archive),
+                              Text(
+                                'Archive',
+                              ),
+                            ],
+                          ),
+                        )),
+                    secondaryBackground: Container(
+                        color: Colors.red,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: const [
+                              Icon(Icons.delete),
+                              Text(
+                                'Trash',
+                              ),
+                            ],
+                          ),
+                        )),
+                    onDismissed: (direction) {
+                      if (direction == DismissDirection.startToEnd) {
+                        setState(() {
+                          widget.archive.add(mess);
+                          searches.remove(mess);
+                        });
+                      } else {
+                        setState(() {
+                          searches.remove(mess);
+                        });
+                      }
+                    },
+                    child: InkWell(
                       onTap: () {
                         Navigator.push(
                             context,
@@ -246,28 +246,30 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) =>
                                     MessagePage(message: mess)));
                       },
-                      child: Flexible(
-                        child: Row(children: <Widget>[
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: mess.getColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              mess.getName[0],
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30,
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              height: 60,
+                              width: 60,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: mess.getColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                mess.getName[0],
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 50),
-                          Flexible(
-                            child: SizedBox(
-                              width: 350,
+                            const SizedBox(width: 50),
+                            SizedBox(
+                              width: width * 0.6,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -280,6 +282,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Text(
                                     mess.getName,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
@@ -296,10 +299,8 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                             ),
-                          )
-                        ]),
-                      ))),
-            );
+                          ]),
+                    )));
           }).toList(),
         ),
       );
@@ -362,6 +363,8 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
+                            height: 60,
+                            width: 60,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color: mess.getColor,
@@ -380,86 +383,8 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(
                             width: 50,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${months[mess.getMonth]} ${mess.getDay}",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Text(
-                                mess.getName,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Text(
-                                mess.getMessage,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 10,
-                                ),
-                              )
-                            ],
-                          ),
-                        ]))),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-/*Display Sent box */
-  Widget displaySent(BuildContext context, double width) {
-    if (widget.sent.isEmpty) {
-      return const Expanded(
-        child: Center(
-          child: Text("Inbox is empty"),
-        ),
-      );
-    } else if (widget.searchController.text.isNotEmpty) {
-      return SizedBox(
-        width: width,
-        child: Expanded(
-          child: ListView(
-            children: searches.map((Message mess) {
-              return SizedBox(
-                width: width,
-                child: Dismissible(
-                    key: UniqueKey(),
-                    child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MessagePage(message: mess)));
-                        },
-                        child: Row(children: <Widget>[
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: mess.getColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              mess.getName[0],
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 50),
                           SizedBox(
-                            width: 350,
+                            width: width * 0.6,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -484,14 +409,94 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.w300,
                                     fontSize: 10,
                                   ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]))),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+/*Display Sent box */
+  Widget displaySent(BuildContext context, double width) {
+    if (widget.sent.isEmpty) {
+      return const Expanded(
+        child: Center(
+          child: Text("Inbox is empty"),
+        ),
+      );
+    } else if (widget.searchController.text.isNotEmpty) {
+      return Expanded(
+        child: ListView(
+          children: searches.map((Message mess) {
+            return SizedBox(
+              width: width,
+              child: Dismissible(
+                  key: UniqueKey(),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MessagePage(message: mess)));
+                      },
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              height: 60,
+                              width: 60,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: mess.getColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                mess.getName[0],
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 50),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${months[mess.getMonth]} ${mess.getDay}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  mess.getName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  mess.getMessage,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 10,
+                                  ),
                                 )
                               ],
                             ),
-                          )
-                        ]))),
-              );
-            }).toList(),
-          ),
+                          ]))),
+            );
+          }).toList(),
         ),
       );
     }
@@ -507,58 +512,57 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  MessagePage(message: mess)));
+                              builder: (context) => MessagePage(message: mess)));
                     },
-                    child: Row(children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: mess.getColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          mess.getName[0],
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 50),
-                      SizedBox(
-                        width: 350,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${months[mess.getMonth]} ${mess.getDay}",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                    child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: mess.getColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                mess.getName[0],
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
                               ),
                             ),
-                            Text(
-                              mess.getName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${months[mess.getMonth]} ${mess.getDay}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  mess.getName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  mess.getMessage,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 10,
+                                  ),
+                                )
+                              ],
                             ),
-                            Text(
-                              mess.getMessage,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 10,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ]))),
+                          ]),
+                    ))
           );
         }).toList(),
       ),
@@ -628,8 +632,12 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) =>
                                     MessagePage(message: mess)));
                       },
-                      child: Row(children: <Widget>[
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
                         Container(
+                          height: 60,
+                          width: 60,
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: mess.getColor,
@@ -647,7 +655,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(width: 50),
                         SizedBox(
-                          width: 350,
+                          width: width * 0.6,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -660,6 +668,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Text(
                                 mess.getName,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -697,7 +706,9 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) =>
                                   MessagePage(message: mess)));
                     },
-                    child: Row(children: <Widget>[
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
@@ -729,6 +740,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               mess.getName,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
