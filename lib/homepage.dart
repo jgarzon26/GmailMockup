@@ -98,11 +98,6 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           {
             Navigator.push(context, MaterialPageRoute(builder: (context) => ComposePage()));
-            /*Temporary setstate for testing */
-            setState(() {
-              widget.inbox.add(one);
-              widget.inbox.add(two);
-            });
           }
         },
         child: const Icon(Icons.send),
