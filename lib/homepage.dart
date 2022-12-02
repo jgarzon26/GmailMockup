@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmail_mockup/compose.dart';
 import 'package:gmail_mockup/messagepage.dart';
 import 'months.dart';
 import 'message.dart';
@@ -96,6 +97,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ComposePage()));
             /*Temporary setstate for testing */
             setState(() {
               widget.inbox.add(one);
