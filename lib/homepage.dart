@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gmail_mockup/compose.dart';
 import 'package:gmail_mockup/messagepage.dart';
+import 'package:gmail_mockup/overlays.dart';
 import 'months.dart';
 import 'message.dart';
 import 'settings.dart';
@@ -17,67 +18,11 @@ var colors = [
 ];
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
-  final List<Message> inbox = [
-    Message(
-        message: "Hello",
-        sender: "helloworld@gmail.com",
-        name: "World",
-        color: colors[1],
-        dateReceived: DateTime.now()),
-    Message(
-        message: "Hello, universe!",
-        sender: "hellouniv@gmail.com",
-        name: "Universe",
-        color: colors[4],
-        dateReceived: DateTime.now()),
-    Message(
-      message:
-          "You need to submit your work by Monday next week. Otherwise, our work will be severely impeded.",
-      sender: "marley@gmail.com",
-      name: "Marley Son",
-      subject: "Deadline of Project",
-      color: colors[4],
-      dateReceived: DateTime.now(),
-    ),
-    Message(
-        message:
-            "You are this weeks lucky winner of a year's worth of ham! Please come to the lottery office within the week.",
-        sender: "sweepsOf@gmail.com",
-        subject: "Winning Sweepstakes",
-        name: "Office of the Lottery",
-        color: colors[2],
-        dateReceived: DateTime.now()),
-    Message(
-        message: "I need you to get groceries.",
-        sender: "mary@gmail.com",
-        name: "Mary Wells",
-        subject: "Mama needs some groceries!",
-        color: colors[5],
-        dateReceived: DateTime.now()),
-    Message(
-        message:
-            "I need you to wash my car, son. Take it to the nearest car wash this Sunday. I will pay you later.",
-        sender: "dan@gmail.com",
-        name: "Daniel Wells",
-        subject: "Papa needs you to wash the car.",
-        color: colors[0],
-        dateReceived: DateTime.now()),
-    Message(
-        message: "Brother! I'm near you right now! Let's hang out!",
-        sender: "amandy@gmail.com",
-        name: "Amanda Wells",
-        subject: "Hey Bro!",
-        color: colors[5],
-        dateReceived: DateTime.now()),
-    Message(
-        message: "We have found gold near you!",
-        sender: "gold_association@gmail.com",
-        name: "Association of Gold Diggers",
-        subject: "Nearby Gold",
-        color: colors[3],
-        dateReceived: DateTime.now()),
-  ];
+
+  late final String _email;
+
+  HomePage(this._email, {super.key});
+  final List<Message> inbox = [];
   final List<Message> sent = [];
   final List<Message> archive = [];
   final searchController = TextEditingController();
@@ -118,17 +63,19 @@ class _HomePageState extends State<HomePage> {
                   suffixIcon: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Overlays(context).showAccountDetails(true, widget._email);
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: const BoxDecoration(
                           color: Colors.red,
                           shape: BoxShape.circle,
                         ),
-                        child: const Text(
-                          'A',
+                        child: Text(
+                          widget._email.characters.first,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 30,

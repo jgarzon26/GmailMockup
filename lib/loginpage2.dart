@@ -101,7 +101,7 @@ class _LoginPage2State extends State<LoginPage2> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage())
+                MaterialPageRoute(builder: (context) => HomePage(widget._email))
               );
             },
             child: const Text("Next"),

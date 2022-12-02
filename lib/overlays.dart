@@ -8,8 +8,14 @@ class Overlays{
 
   OverlayEntry? _attachmentEntry;
   OverlayEntry? _optionsEntry;
+  OverlayEntry? _accountEntry;
 
   Overlays(this._context);
+
+  void _hideOverlay(OverlayEntry? entry){
+    entry?.remove();
+    entry = null;
+  }
 
   void showAttachment(bool displayOverlay){
     final overlay = Overlay.of(_context)!;
@@ -25,8 +31,7 @@ class Overlays{
 
       overlay.insert(_attachmentEntry!);
     } else{
-      _attachmentEntry?.remove();
-      _attachmentEntry = null;
+      _hideOverlay(_attachmentEntry);
     }
   }
 
@@ -34,11 +39,11 @@ class Overlays{
     child: Column(
       children: [
         ListTile(
-          title: Text("Attach file"),
+          title: const Text("Attach file"),
           onTap: () {},
         ),
         ListTile(
-          title: Text("Insert from Drive"),
+          title: const Text("Insert from Drive"),
           onTap: () {},
         ),
       ],
@@ -59,8 +64,7 @@ class Overlays{
 
       overlay.insert(_optionsEntry!);
     }else{
-      _optionsEntry?.remove();
-      _optionsEntry = null;
+      _hideOverlay(_optionsEntry);
     }
   }
 
@@ -68,18 +72,18 @@ class Overlays{
     child: Column(
       children: [
         ListTile(
-          title: Text("Schedule send"),
+          title: const Text("Schedule send"),
           onTap: () {},
         ),
         ListTile(
-          title: Text("Add from Contacts"),
+          title: const Text("Add from Contacts"),
           onTap: () {},
         ),
         ListTile(
-          title: Text("Confidential Mode"),
+          title: const Text("Confidential Mode"),
           onTap: () {},
         ),
-        ListTile(
+        const ListTile(
           title: Text(
             "Save draft",
             style: TextStyle(
@@ -89,17 +93,129 @@ class Overlays{
           onTap: null,
         ),
         ListTile(
-          title: Text("Discard"),
+          title: const Text("Discard"),
           onTap: () {},
         ),
         ListTile(
-          title: Text("Settings"),
+          title: const Text("Settings"),
           onTap: () {},
         ),
         ListTile(
-          title: Text("Help and feedback"),
+          title: const Text("Help and feedback"),
           onTap: () {},
         ),
+      ],
+    ),
+  );
+
+  void showAccountDetails(bool displayAccount, String email){
+    final overlay = Overlay.of(_context)!;
+
+    if(displayAccount){
+      _accountEntry = OverlayEntry(builder: (context) =>
+          Stack(
+            children: [
+              Container(
+                color: Colors.black.withOpacity(0.8),
+                child: GestureDetector(
+                  onTap: () => _hideOverlay(_accountEntry),
+                ),
+              ),
+              Positioned(
+                width: MediaQuery.of(context).size.width * 0.8,
+                top: MediaQuery.of(context).size.height * 0.17,
+                left: MediaQuery.of(context).size.width * 0.1,
+                child: _buildAccount(email),
+              ),
+            ],
+          ),
+      );
+      overlay.insert(_accountEntry!);
+    } else {
+      _hideOverlay(_accountEntry);
+    }
+  }
+
+  Widget _buildAccount(String email) => Material(
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.clear,
+                  ),
+                  onPressed: () {
+                  _hideOverlay(_accountEntry);
+                  },
+                ),
+              ),
+              const Text(
+                "Google",
+                style: TextStyle(
+                  fontSize: 22,
+                ),
+              ),
+            ],
+          ),
+        ),
+        ListTile(
+          leading: Icon(
+              Icons.person,
+          ),
+          title: Text(
+            email
+          ),
+          trailing: Text(
+            "99+",
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: ElevatedButton(
+              onPressed: () {},
+              child: Text("Manage your Google Account"),
+          ),
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.person_add_alt,
+          ),
+          title: Text(
+            "Add another account",
+          ),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.manage_accounts,
+          ),
+          title: Text(
+            "Manage accounts on this device",
+          ),
+          onTap: () {},
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Privacy Policy")
+              ),
+              ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Terms of service")
+              ),
+            ],
+          ),
+        )
       ],
     ),
   );
