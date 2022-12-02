@@ -113,11 +113,21 @@ class Overlays{
 
     if(displayAccount){
       _accountEntry = OverlayEntry(builder: (context) =>
-          Positioned(
-            width: MediaQuery.of(context).size.width * 0.8,
-            top: MediaQuery.of(context).size.height * 0.17,
-            left: MediaQuery.of(context).size.width * 0.1,
-            child: _buildAccount(email),
+          Stack(
+            children: [
+              Container(
+                color: Colors.black.withOpacity(0.8),
+                child: GestureDetector(
+                  onTap: () => _hideOverlay(_accountEntry),
+                ),
+              ),
+              Positioned(
+                width: MediaQuery.of(context).size.width * 0.8,
+                top: MediaQuery.of(context).size.height * 0.17,
+                left: MediaQuery.of(context).size.width * 0.1,
+                child: _buildAccount(email),
+              ),
+            ],
           ),
       );
       overlay.insert(_accountEntry!);
