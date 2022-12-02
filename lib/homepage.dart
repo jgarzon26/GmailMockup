@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gmail_mockup/compose.dart';
+import 'package:gmail_mockup/messagepage.dart';
+import 'months.dart';
 import 'message.dart';
-
-/*Conversion for month */
-const months = {
-  1: "January",
-  2: "February",
-  3: "March",
-  4: "April",
-  5: "May",
-  6: "June",
-  7: "July",
-  8: "August",
-  9: "September",
-  10: "October",
-  11: "November",
-  12: "December",
-};
+import 'settings.dart';
 
 enum CurrentBox { inbox, sent, archive }
 
@@ -120,6 +107,7 @@ class _HomePageState extends State<HomePage> {
         },
         child: const Icon(Icons.send),
       ),
+      bottomNavigationBar: getBottomNav(),
     ));
   }
 
@@ -205,7 +193,13 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
                 child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MessagePage(message: mess)));
+                    },
                     child: Row(children: <Widget>[
                       Container(
                         padding: const EdgeInsets.all(10),
@@ -303,7 +297,12 @@ class _HomePageState extends State<HomePage> {
                 }
               },
               child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MessagePage(message: mess)));
+                  },
                   child: Row(children: <Widget>[
                     Container(
                       padding: const EdgeInsets.all(10),
@@ -372,7 +371,13 @@ class _HomePageState extends State<HomePage> {
             return Dismissible(
                 key: UniqueKey(),
                 child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MessagePage(message: mess)));
+                    },
                     child: Row(children: <Widget>[
                       Container(
                         padding: const EdgeInsets.all(10),
@@ -431,7 +436,12 @@ class _HomePageState extends State<HomePage> {
           return Dismissible(
               key: UniqueKey(),
               child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MessagePage(message: mess)));
+                  },
                   child: Row(children: <Widget>[
                     Container(
                       padding: const EdgeInsets.all(10),
@@ -539,7 +549,13 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
                 child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MessagePage(message: mess)));
+                    },
                     child: Row(children: <Widget>[
                       Container(
                         padding: const EdgeInsets.all(10),
@@ -598,7 +614,12 @@ class _HomePageState extends State<HomePage> {
           return Dismissible(
               key: UniqueKey(),
               child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MessagePage(message: mess)));
+                  },
                   child: Row(children: <Widget>[
                     Container(
                       padding: const EdgeInsets.all(10),
@@ -717,7 +738,35 @@ class _HomePageState extends State<HomePage> {
             Navigator.pop(context);
           },
         ),
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: const Text(
+            "Settings",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Settings()));
+          },
+        )
       ],
     ));
+  }
+
+  Widget getBottomNav() {
+    return BottomNavigationBar(items: const <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.mail),
+        label: 'Mail',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.meeting_room),
+        label: 'Meet',
+      ),
+    ]);
   }
 }
