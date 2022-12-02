@@ -108,12 +108,19 @@ class Overlays{
     ),
   );
 
-  void showAccountDetails(bool displayAccount){
+  void showAccountDetails(bool displayAccount, String email){
     final overlay = Overlay.of(_context)!;
 
     if(displayAccount){
       _accountEntry = OverlayEntry(builder: (context) =>
-          _buildAccount()
+          Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: _buildAccount(email),
+            ),
+          ),
+        opaque: true,
       );
 
       overlay.insert(_accountEntry!);
@@ -122,7 +129,63 @@ class Overlays{
     }
   }
 
-  Widget _buildAccount() => Material(
-    
+  Widget _buildAccount(String email) => Material(
+    child: Column(
+      children: [
+        ListTile(
+          leading: IconButton(
+            icon: Icon(
+              Icons.clear,
+            ),
+            onPressed: () {
+              _hideOverlay(_accountEntry);
+            },
+          ),
+          title: Text(
+            "Google",
+            textAlign: TextAlign.center,
+          ),
+        ),
+        ListTile(
+          leading: Icon(
+              Icons.person,
+          ),
+          title: Text(
+            email
+          ),
+          trailing: Text(
+            "99+",
+          ),
+        ),
+        ElevatedButton(
+            onPressed: () {},
+            child: Text("Manage your Google Account"),
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.person_add_alt,
+          ),
+          title: Text(
+            "Add another account",
+          ),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.manage_accounts,
+          ),
+          title: Text(
+            "Manage accounts on this device",
+          ),
+          onTap: () {},
+        ),
+        Row(
+          children: [
+            ElevatedButton(onPressed: () {}, child: Text("Privacy Policy")),
+            ElevatedButton(onPressed: () {}, child: Text("Terms of service")),
+          ],
+        )
+      ],
+    ),
   );
 }
