@@ -91,11 +91,15 @@ class MessagePage extends StatelessWidget {
           height: 10,
         ),
         Expanded(
-          child: Text(
-            message.getMessage,
-            style: const TextStyle(
-              fontSize: 30,
-            ),
+          child: ListView(
+            children: [
+              Text(
+                message.getMessage,
+                style: const TextStyle(
+                  fontSize: 30,
+                ),
+              ),
+            ],
           ),
         ),
       ]),
