@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gmail_mockup/compose.dart';
 import 'package:gmail_mockup/messagepage.dart';
 import 'package:gmail_mockup/overlays.dart';
-import 'package:gmail_mockup/sentboxPage.dart';
 import 'months.dart';
 import 'message.dart';
 import 'settings.dart';
@@ -21,8 +20,6 @@ var colors = [
 class HomePage extends StatefulWidget {
 
   late final String _email;
-
-  void addSentMessage(Message message) => sent.add(message);
 
   HomePage(this._email, {super.key});
   final List<Message> inbox = [];
@@ -96,7 +93,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ComposePage(widget.addSentMessage, widget._email)));
+                MaterialPageRoute(builder: (context) => ComposePage()));
           }
         },
         child: const Icon(Icons.send),
@@ -375,7 +372,7 @@ class _HomePageState extends State<HomePage> {
     if (widget.sent.isEmpty) {
       return const Expanded(
         child: Center(
-          child: Text("Sent box is empty"),
+          child: Text("Inbox is empty"),
         ),
       );
     } else if (widget.searchController.text.isNotEmpty) {
