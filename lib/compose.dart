@@ -4,8 +4,13 @@ import 'overlays.dart';
 
 class ComposePage extends StatefulWidget{
 
+  final void Function(Message) addMessageToSentBox;
+  final String email;
+
   @override
   State<ComposePage> createState() => _ComposePageState();
+
+  const ComposePage(this.addMessageToSentBox, this.email, {super.key});
 }
 
 class _ComposePageState extends State<ComposePage> {
@@ -13,10 +18,16 @@ class _ComposePageState extends State<ComposePage> {
   var _isAttachmentOpen = false;
   var _isOptionsOpen = false;
 
-  final _fromController = TextEditingController();
+  late final TextEditingController _fromController;
   final _toController = TextEditingController();
   final _subjectController = TextEditingController();
   final _composeEmailController = TextEditingController();
+
+  @override
+  void initState(){
+    super.initState();
+    _fromController = TextEditingController(text: widget.email);
+  }
 
   @override
   Widget build(BuildContext context){
@@ -63,7 +74,19 @@ class _ComposePageState extends State<ComposePage> {
                   ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  var message = Message(
+                      message: _composeEmailController.text,
+                      sender: _toController.text,
+                      name: _fromController.text,
+                      subject: _subjectController.text,
+                      color: Colors.blue,
+                      dateReceived: DateTime.now(),
+                  );
+
+                  widget.addMessageToSentBox(message);
+                  Navigator.pop(context);
+                },
                 icon: Icon(
                   Icons.send,
                 ),
@@ -93,6 +116,7 @@ class _ComposePageState extends State<ComposePage> {
               ),
               TextFormField(
                 controller: _toController,
+                keyboardType: TextInputType.emailAddress,
                 autofocus: true,
                 decoration: InputDecoration(
                     label: Text(

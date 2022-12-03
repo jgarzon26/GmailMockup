@@ -65,6 +65,7 @@ class _LoginPage1State extends State<LoginPage1>{
               TextFormField(
                 //keyboardType: TextInputType.emailAddress,
                 controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: "Email or phone",
                 ),
