@@ -372,7 +372,7 @@ class _HomePageState extends State<HomePage> {
     if (widget.sent.isEmpty) {
       return const Expanded(
         child: Center(
-          child: Text("Inbox is empty"),
+          child: Text("Sent box is empty"),
         ),
       );
     } else if (widget.searchController.text.isNotEmpty) {
