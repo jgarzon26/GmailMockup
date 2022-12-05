@@ -56,11 +56,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var width = size.width;
+    var height = size.height;
     return SafeArea(
         child: Scaffold(
       key: scaffoldKey,
-      drawer: getDrawer(context),
+      drawer: getDrawer(context, width, height),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(5.0),
@@ -97,6 +99,15 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   )),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(4, 5, 0, 6),
+            child: Text(
+              "Primary",
+              style: TextStyle(
+                fontWeight: FontWeight.w200,
+              ),
             ),
           ),
           runBoxes(width),
@@ -953,42 +964,162 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget getDrawer(BuildContext context) {
+  Widget getDrawer(BuildContext context, double height, double width) {
     return Drawer(
         child: ListView(
       children: [
-        const DrawerHeader(
-            child: Text(
-          "Menu",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 50,
-          ),
-        )),
-        ListTile(
-            leading: const Icon(Icons.inbox),
-            title: const Text(
-              "Inbox",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
-              ),
+        Container(
+          height: height * 0.13,
+          decoration: const BoxDecoration(
+              border: Border(
+            bottom: BorderSide(color: Colors.black),
+          )),
+          child: const DrawerHeader(
+              child: Text(
+            "Gmail",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
             ),
-            onTap: () {
+          )),
+        ),
+        ListTile(
+          leading: const Icon(Icons.inbox),
+          trailing: const Text(
+            "99+",
+            style: TextStyle(
+              fontWeight: FontWeight.w200,
+              fontSize: 14,
+            ),
+          ),
+          title: const Text("Primary"),
+          onTap: () {
               widget.searchController.clear();
               setState(() {
                 currBox = CurrentBox.inbox.index;
                 searches.clear();
               });
-              Navigator.pop(context);
-            }),
+              Navigator.pop(context);},
+        ),
+        ListTile(
+          leading: const Icon(Icons.local_offer_outlined),
+          trailing: const Text(
+            "2 new",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          title: const Text("Promotions"),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.people_alt_outlined),
+          trailing: const Text(
+            "3 new",
+            style: TextStyle(
+              fontWeight: FontWeight.w200,
+              fontSize: 14,
+            ),
+          ),
+          title: const Text("Social"),
+          onTap: () {},
+        ),
+        const Padding(
+          padding:  EdgeInsets.fromLTRB(5, 4, 0, 4),
+          child:  Text(
+            "All labels",
+            style: TextStyle(
+              fontWeight: FontWeight.w200,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        ListTile(
+          leading: const Icon(Icons.star_border_outlined),
+          title: const Text(
+            "Starred",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.schedule),
+          title: const Text(
+            "Snoozed",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.label_important_outline),
+          title: const Text(
+            "Important",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.schedule_send_outlined),
+          title: const Text(
+            "Scheduled",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.outbox),
+          title: const Text(
+            "OutBox",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.description_outlined),
+          title: const Text(
+            "Draft",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.mail),
+          title: const Text(
+            "All mail",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.error_outline),
+          title: const Text(
+            "Spam",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          onTap: () {},
+        ),
         ListTile(
           leading: const Icon(Icons.send),
           title: const Text(
             "Sent",
             style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: 14,
             ),
           ),
           onTap: () {
@@ -1005,8 +1136,7 @@ class _HomePageState extends State<HomePage> {
           title: const Text(
             "Archived",
             style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: 14,
             ),
           ),
           onTap: () {
@@ -1019,12 +1149,21 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         ListTile(
+          leading: const Icon(Icons.delete_outline),
+          title: const Text(
+            "Trash",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          onTap: () {},
+        ),
+        ListTile(
           leading: const Icon(Icons.settings),
           title: const Text(
             "Settings",
             style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: 14,
             ),
           ),
           onTap: () {
