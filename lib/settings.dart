@@ -42,7 +42,7 @@ class Settings extends StatelessWidget {
                   height: 60,
                   child: Text(
                     email,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 25,
                     ),
                   ),
