@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'generalsettings.dart';
 
 class Settings extends StatelessWidget {
-  const Settings({super.key});
+  const Settings({super.key, required this.email});
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +40,8 @@ class Settings extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   width: width,
                   height: 60,
-                  child: const Text(
-                    "adrian@gmail.com",
+                  child: Text(
+                    email,
                     style: TextStyle(
                       fontSize: 25,
                     ),

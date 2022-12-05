@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
   late final String _email;
 
   HomePage(this._email, {super.key});
-  final List<Message> inbox = [];
+  final List<Message> inbox = [Message(message: "Test due this Monday.", subject: "Test Due", sender: "rem@gmail.com", name: "Rembrand Holmes", color: colors[0], dateReceived: DateTime.now())];
   final List<Message> sent = [];
   final List<Message> archive = [];
   final searchController = TextEditingController();
@@ -372,7 +372,7 @@ class _HomePageState extends State<HomePage> {
     if (widget.sent.isEmpty) {
       return const Expanded(
         child: Center(
-          child: Text("Inbox is empty"),
+          child: Text("Sentbox is empty"),
         ),
       );
     } else if (widget.searchController.text.isNotEmpty) {
@@ -788,7 +788,7 @@ class _HomePageState extends State<HomePage> {
           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const Settings()));
+                MaterialPageRoute(builder: (context) => Settings(email: widget._email,)));
           },
         )
       ],
