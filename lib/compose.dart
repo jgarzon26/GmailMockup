@@ -4,6 +4,11 @@ import 'overlays.dart';
 
 class ComposePage extends StatefulWidget{
 
+  final String email;
+  final void Function(Message) updateSentBox;
+
+  const ComposePage(this.email, this.updateSentBox, {super.key});
+
   @override
   State<ComposePage> createState() => _ComposePageState();
 }
@@ -17,6 +22,13 @@ class _ComposePageState extends State<ComposePage> {
   final _toController = TextEditingController();
   final _subjectController = TextEditingController();
   final _composeEmailController = TextEditingController();
+
+  @override
+  void initState(){
+    super.initState();
+
+    _fromController.text = widget.email;
+  }
 
   @override
   Widget build(BuildContext context){
@@ -41,6 +53,8 @@ class _ComposePageState extends State<ComposePage> {
         onTap: () => displayOverlays(),
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
@@ -63,7 +77,11 @@ class _ComposePageState extends State<ComposePage> {
                   ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  var message = Message(message: _composeEmailController.text, sender: _toController.text, name: _fromController.text, color: Colors.blue, dateReceived: DateTime.now(), subject: _subjectController.text);
+                  widget.updateSentBox(message);
+                  Navigator.pop(context);
+                },
                 icon: Icon(
                   Icons.send,
                 ),
