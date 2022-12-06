@@ -66,6 +66,7 @@ class _ComposePageState extends State<ComposePage> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
+            elevation: 0,
             foregroundColor: Colors.black,
             leading: IconButton(
               icon: Icon(
