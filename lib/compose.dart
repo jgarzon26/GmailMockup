@@ -15,13 +15,19 @@ class ComposePage extends StatefulWidget{
 
 class _ComposePageState extends State<ComposePage> {
 
+  var overlays;
+
   var _isAttachmentOpen = false;
   var _isOptionsOpen = false;
 
   final _fromController = TextEditingController();
   final _toController = TextEditingController();
+  final _ccController = TextEditingController();
+  final _bccController = TextEditingController();
   final _subjectController = TextEditingController();
   final _composeEmailController = TextEditingController();
+
+  var _showMore = false;
 
   @override
   void initState(){
@@ -30,27 +36,27 @@ class _ComposePageState extends State<ComposePage> {
     _fromController.text = widget.email;
   }
 
+  void _displayOverlays(){
+    if(_isAttachmentOpen){
+      overlays.showAttachment(false);
+      _isAttachmentOpen = false;
+    }
+
+    if(_isOptionsOpen){
+      overlays.showOptions(false);
+      _isOptionsOpen = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context){
 
-    final overlays = Overlays(context);
-
-    void displayOverlays(){
-      if(_isAttachmentOpen){
-        overlays.showAttachment(false);
-        _isAttachmentOpen = false;
-      }
-
-      if(_isOptionsOpen){
-        overlays.showOptions(false);
-        _isOptionsOpen = false;
-      }
-    }
+    overlays = Overlays(context);
 
     return SafeArea(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => displayOverlays(),
+        onTap: () => _displayOverlays(),
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
@@ -112,7 +118,7 @@ class _ComposePageState extends State<ComposePage> {
                     ),
                   ),
                 ),
-                onTap: displayOverlays,
+                onTap: _displayOverlays,
                 readOnly: true,
                 enabled: false,
               ),
@@ -135,8 +141,17 @@ class _ComposePageState extends State<ComposePage> {
                     ),
                   ),
                   prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+
+                    },
+                  ),
                 ),
-                onTap: displayOverlays,
+                onTap: _displayOverlays,
               ),
               TextField(
                 controller: _subjectController,
@@ -149,7 +164,7 @@ class _ComposePageState extends State<ComposePage> {
                     ),
                   hintText: "Subject"
                 ),
-                onTap: displayOverlays,
+                onTap: _displayOverlays,
               ),
               Expanded(
                 flex: 3,
@@ -164,7 +179,7 @@ class _ComposePageState extends State<ComposePage> {
                     ),
                     expands: true,
                     maxLines: null,
-                    onTap: displayOverlays,
+                    onTap: _displayOverlays,
                   ),
                 ),
               ),
@@ -172,6 +187,58 @@ class _ComposePageState extends State<ComposePage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget dropDownDetails()
+  {
+    return Column(
+      children: [
+        TextFormField(
+          autofocus: true,
+          controller: _ccController,
+          decoration: InputDecoration(
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black.withOpacity(0.4),
+                ),
+            ),
+            prefixIcon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Cc",
+                style: TextStyle(
+                  color: Colors.black.withOpacity(0.7),
+                ),
+              ),
+            ),
+            prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+          ),
+          onTap: _displayOverlays,
+        ),
+        TextFormField(
+          autofocus: true,
+          controller: _bccController,
+          decoration: InputDecoration(
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black.withOpacity(0.4),
+                )
+            ),
+            prefixIcon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Bcc",
+                style: TextStyle(
+                  color: Colors.black.withOpacity(0.7),
+                ),
+              ),
+            ),
+            prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+          ),
+          onTap: _displayOverlays,
+        ),
+      ],
     );
   }
 
