@@ -37,6 +37,41 @@ class HomePage extends StatefulWidget {
       name: "Ann Holmes",
       color: colors[1],
       dateReceived: DateTime.now(),
+    ),
+    Message(
+      message:
+          "Hello. This is your mother speaking. Please buy me a new pair shoes",
+      subject: "Your mother here and she needs a new pair of shoes",
+      sender: "monique@gmail.com",
+      name: "Monique Stevens",
+      color: colors[3],
+      dateReceived: DateTime.now(),
+    ),
+    Message(
+      message:
+          "Hey son, I am going to take you on a field trip next Sunday. Free up your schedule on that day.",
+      subject: "Let's go somewhere",
+      sender: "lester@gmail.com",
+      name: "Lester Stevens",
+      color: colors[1],
+      dateReceived: DateTime.now(),
+    ),
+    Message(
+      message:
+          "Congratulations! You are the lucky winner of P100,000. Please claim it here in the office or have it forfeit.",
+      subject: "Congratulations",
+      sender: "ofL@gmail.com",
+      name: "Office of the Lottery",
+      color: colors[3],
+      dateReceived: DateTime.now(),
+    ),
+    Message(
+      message: "Let's hang out!",
+      subject: "Hey bro!",
+      sender: "ann@gmail.com",
+      name: "Ann Stevens",
+      color: colors[5],
+      dateReceived: DateTime.now(),
     )
   ];
   final List<Message> sent = [];
@@ -165,7 +200,7 @@ class _HomePageState extends State<HomePage> {
     } else if (widget.searchController.text.isNotEmpty) {
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5),
           child: ListView(
             children: searches.map((Message mess) {
               return SizedBox(
@@ -238,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: width * 0.05),
+                                const SizedBox(width: 10),
                                 SizedBox(
                                   width: width * 0.8,
                                   child: Column(
@@ -388,7 +423,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: width * 0.05),
+                              const SizedBox(width: 10),
                               SizedBox(
                                 width: width * 0.8,
                                 child: Column(
@@ -424,26 +459,29 @@ class _HomePageState extends State<HomePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              mess.getSubject,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15,
+                                        Flexible(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                mess.getSubject,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              mess.getMessage,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 10,
+                                              Text(
+                                                mess.getMessage,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 10,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                         IconButton(
                                             onPressed: () {},
@@ -474,7 +512,7 @@ class _HomePageState extends State<HomePage> {
     } else if (widget.searchController.text.isNotEmpty) {
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5),
           child: ListView(
             children: searches.map((Message mess) {
               return SizedBox(
@@ -508,7 +546,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: width * 0.05),
+                                const SizedBox(width: 10),
                                 SizedBox(
                                   width: width * 0.8,
                                   child: Column(
@@ -619,7 +657,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: width * 0.05),
+                                const SizedBox(width: 10),
                                 SizedBox(
                                   width: width * 0.8,
                                   child: Column(
@@ -705,7 +743,7 @@ class _HomePageState extends State<HomePage> {
     } else if (widget.searchController.text.isNotEmpty) {
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5),
           child: ListView(
             children: searches.map((Message mess) {
               return SizedBox(
@@ -778,7 +816,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: width * 0.05),
+                                const SizedBox(width: 10),
                                 SizedBox(
                                   width: width * 0.8,
                                   child: Column(
@@ -855,7 +893,7 @@ class _HomePageState extends State<HomePage> {
     }
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5),
         child: ListView(
           children: widget.archive.map((Message mess) {
             return SizedBox(
@@ -889,7 +927,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: width * 0.05),
+                              const SizedBox(width: 10),
                               SizedBox(
                                 width: width * 0.8,
                                 child: Column(
@@ -994,12 +1032,13 @@ class _HomePageState extends State<HomePage> {
           ),
           title: const Text("Primary"),
           onTap: () {
-              widget.searchController.clear();
-              setState(() {
-                currBox = CurrentBox.inbox.index;
-                searches.clear();
-              });
-              Navigator.pop(context);},
+            widget.searchController.clear();
+            setState(() {
+              currBox = CurrentBox.inbox.index;
+              searches.clear();
+            });
+            Navigator.pop(context);
+          },
         ),
         ListTile(
           leading: const Icon(Icons.local_offer_outlined),
@@ -1025,8 +1064,8 @@ class _HomePageState extends State<HomePage> {
           onTap: () {},
         ),
         const Padding(
-          padding:  EdgeInsets.fromLTRB(5, 4, 0, 4),
-          child:  Text(
+          padding: EdgeInsets.fromLTRB(5, 4, 0, 4),
+          child: Text(
             "All labels",
             style: TextStyle(
               fontWeight: FontWeight.w200,
