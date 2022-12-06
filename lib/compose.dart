@@ -102,9 +102,15 @@ class _ComposePageState extends State<ComposePage> {
               TextField(
                 controller: _fromController,
                 decoration: InputDecoration(
-                  label: Text(
-                    "from",
-                  )
+                  prefix: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "From",
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ),
+                  ),
                 ),
                 onTap: displayOverlays,
                 readOnly: true,
@@ -113,26 +119,29 @@ class _ComposePageState extends State<ComposePage> {
               TextFormField(
                 controller: _toController,
                 autofocus: true,
-                decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                    )
-                  ),
+                decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.black,
+                        color: Colors.black.withOpacity(0.4),
                       )
                   ),
-                  label: Text(
-                      "to",
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                        "To",
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ),
                   ),
+                  prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
                 ),
                 onTap: displayOverlays,
               ),
               TextField(
                 controller: _subjectController,
                 decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.black.withOpacity(0.4),
@@ -149,6 +158,7 @@ class _ComposePageState extends State<ComposePage> {
                   child: TextField(
                     controller: _composeEmailController,
                     decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                       isCollapsed: true,
                       hintText: "Compose email",
                     ),
