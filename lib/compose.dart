@@ -126,16 +126,20 @@ class _ComposePageState extends State<ComposePage> {
                 ),
                 onTap: displayOverlays,
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: TextField(
-                  controller: _composeEmailController,
-                  decoration: InputDecoration(
-                    isCollapsed: true,
-                    hintText: "Compose email",
-                    floatingLabelBehavior: FloatingLabelBehavior.auto,
+              Expanded(
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: TextField(
+                    controller: _composeEmailController,
+                    decoration: const InputDecoration(
+                      isCollapsed: true,
+                      hintText: "Compose email",
+                    ),
+                    expands: true,
+                    maxLines: null,
+                    onTap: displayOverlays,
                   ),
-                  onTap: displayOverlays,
                 ),
               ),
             ],
