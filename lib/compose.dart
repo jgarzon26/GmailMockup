@@ -108,20 +108,36 @@ class _ComposePageState extends State<ComposePage> {
                 ),
                 onTap: displayOverlays,
                 readOnly: true,
+                enabled: false,
               ),
               TextFormField(
                 controller: _toController,
                 autofocus: true,
-                decoration: InputDecoration(
-                    label: Text(
-                      "to",
+                decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black,
                     )
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                      )
+                  ),
+                  label: Text(
+                      "to",
+                  ),
                 ),
                 onTap: displayOverlays,
               ),
               TextField(
                 controller: _subjectController,
                 decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black.withOpacity(0.4),
+                        )
+                    ),
                   hintText: "Subject"
                 ),
                 onTap: displayOverlays,
