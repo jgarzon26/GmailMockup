@@ -29,6 +29,12 @@ class _ComposePageState extends State<ComposePage> {
 
   var _showMore = false;
 
+  void _setShowMore(bool display){
+    setState(() {
+      _showMore = display;
+    });
+  }
+
   @override
   void initState(){
     super.initState();
@@ -118,7 +124,10 @@ class _ComposePageState extends State<ComposePage> {
                     ),
                   ),
                 ),
-                onTap: _displayOverlays,
+                onTap: () {
+                  _displayOverlays();
+                  _setShowMore(false);
+                },
                 readOnly: true,
                 enabled: false,
               ),
@@ -141,18 +150,22 @@ class _ComposePageState extends State<ComposePage> {
                     ),
                   ),
                   prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
-                  suffixIcon: IconButton(
+                  suffixIcon: !_showMore ? IconButton(
                     icon: const Icon(
                       Icons.keyboard_arrow_down,
                       color: Colors.black,
                     ),
                     onPressed: () {
-
+                      _setShowMore(true);
                     },
-                  ),
+                  ) : null,
                 ),
-                onTap: _displayOverlays,
+                onTap: () {
+                  _displayOverlays();
+                  _showMore = false;
+                },
               ),
+              dropDownDetails(),
               TextField(
                 controller: _subjectController,
                 decoration: InputDecoration(
@@ -164,7 +177,10 @@ class _ComposePageState extends State<ComposePage> {
                     ),
                   hintText: "Subject"
                 ),
-                onTap: _displayOverlays,
+                onTap: () {
+                  _displayOverlays();
+                  _setShowMore(false);
+                },
               ),
               Expanded(
                 flex: 3,
@@ -179,7 +195,10 @@ class _ComposePageState extends State<ComposePage> {
                     ),
                     expands: true,
                     maxLines: null,
-                    onTap: _displayOverlays,
+                    onTap: () {
+                      _displayOverlays();
+                      _setShowMore(false);
+                    },
                   ),
                 ),
               ),
@@ -194,7 +213,7 @@ class _ComposePageState extends State<ComposePage> {
   {
     return Column(
       children: [
-        TextFormField(
+        if(_showMore || _ccController.text.isNotEmpty)  TextFormField(
           autofocus: true,
           controller: _ccController,
           decoration: InputDecoration(
@@ -216,7 +235,7 @@ class _ComposePageState extends State<ComposePage> {
           ),
           onTap: _displayOverlays,
         ),
-        TextFormField(
+        if(_showMore || _bccController.text.isNotEmpty)  TextFormField(
           autofocus: true,
           controller: _bccController,
           decoration: InputDecoration(
