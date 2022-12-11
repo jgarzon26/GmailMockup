@@ -9,6 +9,7 @@ class Overlays{
   OverlayEntry? _attachmentEntry;
   OverlayEntry? _optionsEntry;
   OverlayEntry? _accountEntry;
+  OverlayEntry? _messageEntry;
 
   Overlays(this._context);
 
@@ -241,6 +242,80 @@ class Overlays{
           ),
         )
       ],
+    ),
+  );
+
+  
+  void showMessageOptions(bool displayOptions){
+    final overlay = Overlay.of(_context)!;
+
+    if(displayOptions){
+      _messageEntry = OverlayEntry(builder: (context) =>
+          Positioned(
+            width: MediaQuery.of(context).size.width * 0.8,
+            left: MediaQuery.of(context).size.width * 0.5,
+            top: MediaQuery.of(context).size.height * 0.08,
+            child: _buildMessageOptions(),
+          ));
+
+      overlay.insert(_messageEntry!);
+    }else{
+      _hideOverlay(_messageEntry);
+    }
+  }
+
+  Widget _buildMessageOptions() => Material(
+    child: Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3),
+          ),
+        ]
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            title: const Text("Move to"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Snooze"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Change labels"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Mark not important"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Mute"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Print"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Report spam"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Add to Tasks"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Help & feedback"),
+            onTap: () {},
+          ),
+        ],
+      ),
     ),
   );
 }
