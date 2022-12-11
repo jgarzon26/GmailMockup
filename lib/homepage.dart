@@ -78,6 +78,10 @@ class HomePage extends StatefulWidget {
   final List<Message> archive = [];
   final searchController = TextEditingController();
 
+  void updateSentBox(Message message){
+    sent.add(message);
+  }
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -152,7 +156,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ComposePage()));
+                MaterialPageRoute(builder: (context) => ComposePage(widget._email, widget.updateSentBox)));
           }
         },
         child: const Icon(Icons.send),

@@ -36,17 +36,29 @@ class Overlays{
   }
 
   Widget _buildAttachment() => Material(
-    child: Column(
-      children: [
-        ListTile(
-          title: const Text("Attach file"),
-          onTap: () {},
-        ),
-        ListTile(
-          title: const Text("Insert from Drive"),
-          onTap: () {},
-        ),
-      ],
+    child: Container(
+      decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3),
+            ),
+          ]
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            title: const Text("Attach file"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Insert from Drive"),
+            onTap: () {},
+          ),
+        ],
+      ),
     ),
   );
 
@@ -69,42 +81,54 @@ class Overlays{
   }
 
   Widget _buildOptions() => Material(
-    child: Column(
-      children: [
-        ListTile(
-          title: const Text("Schedule send"),
-          onTap: () {},
-        ),
-        ListTile(
-          title: const Text("Add from Contacts"),
-          onTap: () {},
-        ),
-        ListTile(
-          title: const Text("Confidential Mode"),
-          onTap: () {},
-        ),
-        const ListTile(
-          title: Text(
-            "Save draft",
-            style: TextStyle(
-              color: Colors.grey,
-            ),
+    child: Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3),
           ),
-          onTap: null,
-        ),
-        ListTile(
-          title: const Text("Discard"),
-          onTap: () {},
-        ),
-        ListTile(
-          title: const Text("Settings"),
-          onTap: () {},
-        ),
-        ListTile(
-          title: const Text("Help and feedback"),
-          onTap: () {},
-        ),
-      ],
+        ]
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            title: const Text("Schedule send"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Add from Contacts"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Confidential Mode"),
+            onTap: () {},
+          ),
+          const ListTile(
+            title: Text(
+              "Save draft",
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            onTap: null,
+          ),
+          ListTile(
+            title: const Text("Discard"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Settings"),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text("Help and feedback"),
+            onTap: () {},
+          ),
+        ],
+      ),
     ),
   );
 
