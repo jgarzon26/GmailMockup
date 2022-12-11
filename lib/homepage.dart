@@ -78,7 +78,7 @@ class HomePage extends StatefulWidget {
   final List<Message> archive = [];
   final searchController = TextEditingController();
 
-  void updateSentBox(Message message){
+  void updateSentBox(Message message) {
     sent.add(message);
   }
 
@@ -155,8 +155,11 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ComposePage(widget._email, widget.updateSentBox)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ComposePage(widget._email, widget.updateSentBox)));
           }
         },
         child: const Icon(Icons.send),
@@ -1145,7 +1148,14 @@ class _HomePageState extends State<HomePage> {
               fontSize: 14,
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            widget.searchController.clear();
+            setState(() {
+              currBox = CurrentBox.inbox.index;
+              searches.clear();
+            });
+            Navigator.pop(context);
+          },
         ),
         ListTile(
           leading: const Icon(Icons.error_outline),
