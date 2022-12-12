@@ -109,7 +109,9 @@ class _HomePageState extends State<HomePage> {
               controller: widget.searchController,
               onChanged: searchBox,
               decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(180),
+                  ),
                   labelText: 'Search',
                   prefixIcon: IconButton(
                     onPressed: () {
@@ -186,7 +188,19 @@ class _HomePageState extends State<HomePage> {
 
 /*Search function */
   void searchBox(String query) {
-    final searchedMail = widget.inbox.where((message) {
+    List<Message> box = [];
+    switch (currBox) {
+      case 0:
+        box = widget.inbox;
+        break;
+      case 1:
+        box = widget.sent;
+        break;
+      case 2:
+        box = widget.archive;
+        break;
+    }
+    final searchedMail = box.where((message) {
       final name = message.getName.toLowerCase();
       final input = query.toLowerCase();
 
@@ -207,7 +221,7 @@ class _HomePageState extends State<HomePage> {
     } else if (widget.searchController.text.isNotEmpty) {
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5.0),
           child: ListView(
             children: searches.map((Message mess) {
               return SizedBox(
@@ -317,26 +331,31 @@ class _HomePageState extends State<HomePage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                mess.getSubject,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  mess.getSubject,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                  ),
                                                 ),
-                                              ),
-                                              Text(
-                                                mess.getMessage,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w300,
-                                                  fontSize: 10,
+                                                Text(
+                                                  mess.getMessage,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w300,
+                                                    fontSize: 10,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                           IconButton(
                                               onPressed: () {},
@@ -519,238 +538,7 @@ class _HomePageState extends State<HomePage> {
     } else if (widget.searchController.text.isNotEmpty) {
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.all(5),
-          child: ListView(
-            children: searches.map((Message mess) {
-              return SizedBox(
-                width: width,
-                child: Dismissible(
-                    key: UniqueKey(),
-                    child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MessagePage(message: mess)));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  backgroundColor: mess.getColor,
-                                  maxRadius: 25,
-                                  child: Text(
-                                    mess.getName[0],
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 30,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                SizedBox(
-                                  width: width * 0.8,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            mess.getName,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 5, 0),
-                                            child: Text(
-                                              "${months[mess.getMonth]} ${mess.getDay}",
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                mess.getSubject,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                              Text(
-                                                mess.getMessage,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w300,
-                                                  fontSize: 10,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(
-                                                  Icons.star_border_outlined)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ]),
-                        ))),
-              );
-            }).toList(),
-          ),
-        ),
-      );
-    }
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView(
-          children: widget.sent.map((Message mess) {
-            return SizedBox(
-                width: width,
-                child: Dismissible(
-                    key: UniqueKey(),
-                    child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MessagePage(message: mess)));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  backgroundColor: mess.getColor,
-                                  maxRadius: 25,
-                                  child: Text(
-                                    mess.getName[0],
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 30,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                SizedBox(
-                                  width: width * 0.8,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            mess.getName,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 5, 0),
-                                            child: Text(
-                                              "${months[mess.getMonth]} ${mess.getDay}",
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                mess.getSubject,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                              Text(
-                                                mess.getMessage,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w300,
-                                                  fontSize: 10,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(
-                                                  Icons.star_border_outlined)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ]),
-                        ))));
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-/*Display Archive box */
-  Widget displayArchive(BuildContext context, double width) {
-    if (widget.archive.isEmpty) {
-      return const Expanded(
-        child: Center(
-          child: Text("Inbox is empty"),
-        ),
-      );
-    } else if (widget.searchController.text.isNotEmpty) {
-      return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5.0),
           child: ListView(
             children: searches.map((Message mess) {
               return SizedBox(
@@ -788,11 +576,11 @@ class _HomePageState extends State<HomePage> {
                       if (direction == DismissDirection.startToEnd) {
                         setState(() {
                           widget.archive.add(mess);
-                          searches.remove(mess);
+                          widget.inbox.remove(mess);
                         });
                       } else {
                         setState(() {
-                          searches.remove(mess);
+                          widget.inbox.remove(mess);
                         });
                       }
                     },
@@ -860,26 +648,31 @@ class _HomePageState extends State<HomePage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                mess.getSubject,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15,
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  mess.getSubject,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                  ),
                                                 ),
-                                              ),
-                                              Text(
-                                                mess.getMessage,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w300,
-                                                  fontSize: 10,
+                                                Text(
+                                                  mess.getMessage,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w300,
+                                                    fontSize: 10,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                           IconButton(
                                               onPressed: () {},
@@ -900,13 +693,52 @@ class _HomePageState extends State<HomePage> {
     }
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5.0),
         child: ListView(
-          children: widget.archive.map((Message mess) {
+          children: widget.sent.map((Message mess) {
             return SizedBox(
               width: width,
               child: Dismissible(
                   key: UniqueKey(),
+                  background: Container(
+                      color: Colors.green,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(
+                          children: const [
+                            Icon(Icons.archive),
+                            Text(
+                              'Archive',
+                            ),
+                          ],
+                        ),
+                      )),
+                  secondaryBackground: Container(
+                      color: Colors.red,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Icon(Icons.delete),
+                            Text(
+                              'Trash',
+                            ),
+                          ],
+                        ),
+                      )),
+                  onDismissed: (direction) {
+                    if (direction == DismissDirection.startToEnd) {
+                      setState(() {
+                        widget.archive.add(mess);
+                        widget.inbox.remove(mess);
+                      });
+                    } else {
+                      setState(() {
+                        widget.inbox.remove(mess);
+                      });
+                    }
+                  },
                   child: InkWell(
                       onTap: () {
                         Navigator.push(
@@ -970,26 +802,347 @@ class _HomePageState extends State<HomePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              mess.getSubject,
+                                        Flexible(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                mess.getSubject,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              Text(
+                                                mess.getMessage,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                                Icons.star_border_outlined)),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ]),
+                      ))),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+    ;
+  }
+
+/*Display Archive box */
+  Widget displayArchive(BuildContext context, double width) {
+    if (widget.archive.isEmpty) {
+      return const Expanded(
+        child: Center(
+          child: Text("Inbox is empty"),
+        ),
+      );
+    } else if (widget.searchController.text.isNotEmpty) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: ListView(
+            children: searches.map((Message mess) {
+              return SizedBox(
+                width: width,
+                child: Dismissible(
+                    key: UniqueKey(),
+                    background: Container(
+                        color: Colors.green,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            children: const [
+                              Icon(Icons.archive),
+                              Text(
+                                'Archive',
+                              ),
+                            ],
+                          ),
+                        )),
+                    secondaryBackground: Container(
+                        color: Colors.red,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: const [
+                              Icon(Icons.delete),
+                              Text(
+                                'Trash',
+                              ),
+                            ],
+                          ),
+                        )),
+                    onDismissed: (direction) {
+                      if (direction == DismissDirection.startToEnd) {
+                        setState(() {
+                          widget.archive.add(mess);
+                          widget.inbox.remove(mess);
+                        });
+                      } else {
+                        setState(() {
+                          widget.inbox.remove(mess);
+                        });
+                      }
+                    },
+                    child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      MessagePage(message: mess)));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  backgroundColor: mess.getColor,
+                                  maxRadius: 25,
+                                  child: Text(
+                                    mess.getName[0],
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                SizedBox(
+                                  width: width * 0.8,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            mess.getName,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 5, 0),
+                                            child: Text(
+                                              "${months[mess.getMonth]} ${mess.getDay}",
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            Text(
-                                              mess.getMessage,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w300,
                                                 fontSize: 10,
                                               ),
                                             ),
-                                          ],
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  mess.getSubject,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  mess.getMessage,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w300,
+                                                    fontSize: 10,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(
+                                                  Icons.star_border_outlined)),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ]),
+                        ))),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+    }
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: ListView(
+          children: widget.archive.map((Message mess) {
+            return SizedBox(
+              width: width,
+              child: Dismissible(
+                  key: UniqueKey(),
+                  background: Container(
+                      color: Colors.green,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(
+                          children: const [
+                            Icon(Icons.archive),
+                            Text(
+                              'Archive',
+                            ),
+                          ],
+                        ),
+                      )),
+                  secondaryBackground: Container(
+                      color: Colors.red,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Icon(Icons.delete),
+                            Text(
+                              'Trash',
+                            ),
+                          ],
+                        ),
+                      )),
+                  onDismissed: (direction) {
+                    if (direction == DismissDirection.startToEnd) {
+                      setState(() {
+                        widget.archive.add(mess);
+                        widget.inbox.remove(mess);
+                      });
+                    } else {
+                      setState(() {
+                        widget.inbox.remove(mess);
+                      });
+                    }
+                  },
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    MessagePage(message: mess)));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              CircleAvatar(
+                                backgroundColor: mess.getColor,
+                                maxRadius: 25,
+                                child: Text(
+                                  mess.getName[0],
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              SizedBox(
+                                width: width * 0.8,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          mess.getName,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 0, 5, 0),
+                                          child: Text(
+                                            "${months[mess.getMonth]} ${mess.getDay}",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Flexible(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                mess.getSubject,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              Text(
+                                                mess.getMessage,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         IconButton(
                                             onPressed: () {},
