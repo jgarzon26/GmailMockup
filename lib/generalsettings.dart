@@ -22,6 +22,9 @@ class _GeneralSettingsState extends State<GeneralSettings> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("General Settings"),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          foregroundColor: Colors.black,
         ),
         body: ListView(
           children: <Widget>[

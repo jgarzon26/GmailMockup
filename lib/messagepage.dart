@@ -14,19 +14,22 @@ class MessagePage extends StatelessWidget {
     var overlays = Overlays(context);
     bool isMessageOptionsOpen = false;
 
-    void displayOverlay(){
-    if(isMessageOptionsOpen){
-      overlays.showMessageOptions(false);
-      isMessageOptionsOpen = false;
+    void displayOverlay() {
+      if (isMessageOptionsOpen) {
+        overlays.showMessageOptions(false);
+        isMessageOptionsOpen = false;
+      }
     }
-  }
 
     return SafeArea(
         child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => displayOverlay(),
-          child: Scaffold(
-      appBar: AppBar(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => displayOverlay(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          foregroundColor: Colors.black,
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -35,7 +38,8 @@ class MessagePage extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {}, icon: const Icon(Icons.archive_outlined)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.delete_outline)),
+            IconButton(
+                onPressed: () {}, icon: const Icon(Icons.delete_outline)),
             IconButton(
               onPressed: () {},
               icon: const Icon(Icons.mail_outline),
@@ -44,10 +48,11 @@ class MessagePage extends StatelessWidget {
                 onPressed: () {
                   overlays.showMessageOptions(true);
                   isMessageOptionsOpen = true;
-                }, icon: const Icon(Icons.more_vert_outlined))
+                },
+                icon: const Icon(Icons.more_vert_outlined))
           ],
-      ),
-      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        ),
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const SizedBox(
             height: 10,
           ),
@@ -89,79 +94,82 @@ class MessagePage extends StatelessWidget {
                 border: Border(
               bottom: BorderSide(color: Colors.black),
             )),
-            child:
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              CircleAvatar(
-                backgroundColor: message.getColor,
-                maxRadius: 27,
-                child: Text(
-                  message.getName[0],
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Flexible(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            message.getName,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "${months[message.getMonth]} ${message.getDay}",
-                          ),
-                        ],
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: message.getColor,
+                    maxRadius: 27,
+                    child: Text(
+                      message.getName[0],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              const Text(
-                                "To me",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w200,
-                                  fontSize: 10,
+                              Text(
+                                message.getName,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
                                 ),
                               ),
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.keyboard_arrow_down)),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "${months[message.getMonth]} ${message.getDay}",
+                              ),
                             ],
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.reply)),
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.more_vert_outlined)),
+                              Row(
+                                children: [
+                                  const Text(
+                                    "To me",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w200,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                          Icons.keyboard_arrow_down)),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.reply)),
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon:
+                                          const Icon(Icons.more_vert_outlined)),
+                                ],
+                              )
                             ],
                           )
-                        ],
-                      )
-                    ]),
-              ),
-            ]),
+                        ]),
+                  ),
+                ]),
           ),
           const SizedBox(
             height: 10,
@@ -179,8 +187,8 @@ class MessagePage extends StatelessWidget {
               ],
             ),
           ),
-      ]),
-    ),
-        ));
+        ]),
+      ),
+    ));
   }
 }
